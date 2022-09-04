@@ -120,3 +120,127 @@ A3 = [-10, -5, 3, 4, 7, 9]  # No fixed point. Return "None"
 print("In this list: {} Fixed point is: {}\n".format(A1 , find_fix_point(A1)))
 print("In this list: {} Fixed point is: {}\n".format(A2 , find_fix_point(A2)))  
 print("In this list: {} Fixed point is: {}\n".format(A3 , find_fix_point(A3)))   
+
+
+# A bitonic sequence is a sequence of integers such that: x_0 < ... < x_k > ... > x_{n-1}
+# 1, 2, 3, 4, 5, 4, 3, 2, 1 -> 5
+def bitonic_peak(A):
+    # my apporach is using binary search principle 
+    
+    if len(A)<3: # for bitonic sort at least we need 3 elements
+        return None
+    
+    lower = 0 
+    upper = len(A) - 1
+    
+    
+    while lower <=upper:
+        mid = (lower + upper) // 2
+        
+        left = A[mid - 1] if mid - 1 >= 0 else float('-inf')
+        right= A[mid + 1] if mid + 1 < len(A) else float('inf')
+        
+        if A[mid] > left and A[mid] < right:
+            lower = mid + 1
+        elif A[mid] <left and A[mid] > right:
+            upper = mid - 1 
+        elif A[mid] > left and A[mid] > right:
+            return A[mid]  
+    return None
+
+A = [1, 2, 3, 4, 5, 4, 3, 2, 1]
+print("for this bitonic sorted array: {} peak is: {}".format(A, bitonic_peak(A)))
+A = [1, 6, 5, 4, 3, 2, 1]
+print("for this bitonic sorted array: {} peak is: {}".format(A, bitonic_peak(A)))
+A = [1, 2, 3, 4, 5]
+print("for this bitonic sorted array: {} peak is: {}".format(A, bitonic_peak(A)))
+A = [5, 4, 3, 2, 1]
+print("for this bitonic sorted array: {} peak is: {}\n".format(A, bitonic_peak(A)))
+
+def first_occurance(A,target)->int or None: #find the first occurance of dublicate number
+    # Array is sorted Asending
+    if len(A) == 0:
+        return None
+    
+    lower = 0
+    upper = len(A) - 1
+    
+    while lower <= upper:
+        mid = (lower + upper) // 2
+        
+        if A[mid] < target:
+            lower = mid + 1
+        elif A[mid]>target:
+            upper = mid - 1
+        else:
+            if mid - 1 <0:
+                return mid
+            if A[mid - 1] != target:
+                return mid
+            upper = mid - 1
+    return None
+A = [-14, -11 ,-10, 2, 108, 108, 243, 401,401,401]
+
+print("In the following list {} 108 first apperance is at index: {}".format(A, first_occurance(A,108)))
+
+# You are required to write a function that takes a non-negative integer, k, and returns the largest integer
+# whose square is less than or equal to the specified integer k.
+
+# To solve this we can use binary search algo 
+# 1st numbers are sorted by default from 1 to target
+# we look for a largest x such that x^2 <= target
+def nearest_squar_root( target)->int:
+    if target <=0 :
+        return None
+    
+    low = 1
+    high = target // 2 # since we looking for a x that x^2 <= target
+    
+    while low<= high:
+        mid = (low + high) //2
+        
+        if mid*mid < target:
+            sq = mid   # sq would have the largest x
+            low = mid + 1
+        elif mid*mid > target:
+            high = mid - 1 
+        else:
+            return mid
+    return sq
+
+print("\nnearset number's squar root to the number 300 is {} \n".format(nearest_squar_root(300)))
+
+# Exercise: Cyclically Shifted Array
+# Challenge yourself with an exercise in which you'll have to return the index of the smallest number in a cyclically shifted array.
+
+def find(A):
+
+  low = 0 
+  high = len(A) - 1
+  while low <= high:
+    mid = (low + high) // 2
+    if A[mid] < A[high]:
+      high = mid
+    else:
+      low = mid +1 
+  return low - 1
+
+# print(find([5, 6, 7, 1, 2, 3, 5]))
+find([1, 2, 3, 4, 5, 6, 7])
+
+
+# from bisect import bisect, bisect_left, bisect_right
+
+# from binarySearch import binary_search
+
+
+# A = [-14, -10, 2, 108, 108, 243, 285, 285, 285, 401]
+
+
+# print(bisect_left(A,108))
+
+# print(bisect_right(A,108))
+
+# print(bisect(A,108))
+
+# binary_search()
