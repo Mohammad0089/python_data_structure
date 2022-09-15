@@ -62,7 +62,7 @@ print(max_sum_subarray(k,arr))
 # Given an array of positive integers and a number ‘S,’ find the length of the smallest contiguous subarray
 # whose sum is greater than or equal to ‘S’. Return 0 if no such subarray exists.
 
-def smallest_subarray_sum(S: int, arr:list[int]):
+def smallest_subarray_sum(S: int, arr:list):
     
   length_sum = 0
   min_length_subarray = float('inf')
@@ -121,7 +121,7 @@ def longest_substring_with_k_distinct(str_1:str, k:int)->int:
  # problem 5      
 # You are visiting a farm to collect fruits. The farm has a single row of fruit trees.
 # You will be given two baskets, and your goal is to pick as many fruits as possible to be placed in the given baskets.
-def fruits_into_baskets(fruits:list[chr])->int:
+def fruits_into_baskets(fruits:list)->int:
   # TODO: Write your code here
   letter_occurancy = dict()
   for fruit in fruits:
