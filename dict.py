@@ -97,7 +97,7 @@ car = {
 x = car.values()
 car['year'] = 2018
   
-print(i)
+
 
 car = {
     's' : 2,
