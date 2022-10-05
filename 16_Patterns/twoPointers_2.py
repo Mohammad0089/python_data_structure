@@ -1,4 +1,5 @@
 # Problem 1) Triplet sum to zero (medium)
+# Given an array of unsorted numbers, find all unique triplets in it that add up to zero.
 
 def search_triplets(arr):
   # check there is atleast three elements
