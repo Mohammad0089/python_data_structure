@@ -22,7 +22,6 @@ print("Averages of subarrays of size K: " + str(result))
 
 # problem 2
 # Given an array of positive numbers and a positive number ‘k,’ find the maximum sum of any contiguous subarray of size ‘k’.
-
 # Input: [2, 1, 5, 1, 3, 2], k=3 
 # Output: 9
 # Explanation: Subarray with maximum sum is [5, 1, 3].
@@ -164,3 +163,157 @@ def non_repeat_substring(str1:str)->int:
 print("Length of the longest substring: " + str(non_repeat_substring("aabccbb")))
 print("Length of the longest substring: " + str(non_repeat_substring("abbbb")))
 print("Length of the longest substring: " + str(non_repeat_substring("abccde")))
+
+# problem 7
+# Find Maximum in Sliding Window
+
+# Given an integer array and a window of size w, 
+# find the current maximum value in the window as it slides through the entire array.
+
+
+def find_max_sliding_window(nums, window_size):
+    # your code will replace this placeholder return statement
+    if len(nums) <1 or window_size <1:
+        return None
+    
+    window_start = 0
+    window_max = float('-inf')
+    res = []
+    temp = [] 
+
+    for window_end in range(len(nums)):
+        temp.append(nums[window_end])
+
+        if window_end - window_start +1 >= window_size:
+            res.append(max(temp))
+            temp.pop(0)
+            window_start +=1
+
+    return res
+  
+  # Problem 8
+  # Given strings str1 and str2, find the minimum (contiguous) substring sub_str of str1, such that every
+  # character of str2 appears in sub_str in the same order as it is present in str2.
+  
+def min_window(str1, str2):
+
+    min_substring = ""
+    length = float('inf')
+
+    str1_size, str2_size = len(str1), len(str2)
+    str1_ptr, str2_ptr = 0, 0
+
+    while str1_ptr < str1_size:
+
+        if str1[str1_ptr] == str2[str2_ptr]:
+            str2_ptr +=1
+
+            if str2_ptr == str2_size:
+                # that means that all the chars of str2 are in str1 so far.
+                start, end = str1_ptr, str1_ptr + 1
+
+                # now we will loop backward to get in the begign pos
+                str2_ptr -=1 # decrement str2_ptr by 1 to put it in the last pos
+                while str2_ptr >=0:
+                    if str1[start] == str2[str2_ptr]:
+                        str2_ptr -=1
+                    start -=1
+                start +=1 # to bring it back to the correct begining pos
+                str2_ptr = 0 # to bring it back to the correct begining pos
+                if end - start < length:
+                    min_substring = str1[start:end:1]
+                    length = end - start
+                    
+        str1_ptr +=1
+
+    return min_substring
+  
+  
+  # Problem 9
+  # Repeated DNA Sequences
+# this is a navie apporach where O(k*n^2) where k is the dna found in 
+# the series and checked against the rest of the string. spcae coplexity is k*n
+
+# The naive approach would be finding the first sequence of the required length and
+# then checking the remaining string for any repetitions of the same sequence. This will cost O(k * n)
+# O(k×n), where nn is the length of the string and kk is the required length of the repeated sequences.
+# Next, we need to locate a different sequence of the required length and repeat the checking process.
+# The overall complexity would thus be O(n \times k \times n)
+# O(n×k×n), that is, O(k * n^2) O(k×n^2 )
+
+# def find_repeated_sequences(s, k):
+#     dna_repeated = dict()
+#     window_start, window_end = 0, 0
+#     size_s = len(s)
+#     dna=""
+
+#     while window_end <= size_s:
+#         if window_end >= k:
+#             dna = s[window_start:window_end:1]
+#             if dna not in dna_repeated:
+#                 dna_repeated[dna] = 1
+#                 start_pos, end_pos = window_end, window_end + 1
+#                 while end_pos <= size_s:
+#                     if end_pos - start_pos >= k:
+#                         dna_exam = s[start_pos:end_pos:1]
+#                         start_pos +=1
+#                         if dna == dna_exam:
+#                             dna_repeated[dna] += 1    
+#                     end_pos +=1 
+#                 window_start +=1        
+#         window_end +=1
+
+#     res = [k for k, v in dna_repeated.items() if v > 1]
+
+#     return set(res)
+ 
+ #O(n) O(s[i]) 
+ 
+def find_repeated_sequences(s, k):
+    mapping = {'A':1, 'C':2,'G':3, 'T':4}
+    a = len(mapping)
+    window_start,window_end,window_hash = 0,0,0
+    pattern=""
+    matched_patterns, sequence_hashes = set(),set()
+    for i in range(k):
+        window_hash = window_hash + mapping[s[i]] * pow(a, k-(i+1))
+        pattern = pattern+s[i]
+    sequence_hashes.add(window_hash)
+    while window_end < len(s):
+        if window_end>=k:
+            sequence_hashes.add(window_hash)
+            window_hash = (window_hash - mapping[s[window_start]] * pow(a,k-1)) * a
+            window_hash = window_hash + mapping[s[window_end]]
+            window_start+=1
+            pattern = s[window_start:window_end+1]
+            if window_hash in sequence_hashes:  # important to do the checking at the very end 
+                matched_patterns.add(pattern)
+        window_end +=1
+    return matched_patterns
+
+
+print(find_repeated_sequences("AAAAACCCCCAAAAACCCCCC" , 8))
+
+
+# probelm 9 Buy and sell stock
+
+def max_profit(stock_prices):
+    # your code will replace this placeholder return statement++
+    if len(stock_prices)<2:
+        return None
+    window_start, window_end, window_sum = 0,1,0
+    max_profit = float('-inf')
+    while window_end < len(stock_prices):
+        if stock_prices[window_end] < stock_prices[window_start]:
+            window_start = window_end
+        difference = stock_prices[window_end] - stock_prices[window_start]
+        max_profit = max(max_profit, difference)
+        if stock_prices[window_end] < stock_prices[window_start]:
+            window_start = window_end
+
+        window_end +=1
+
+    return max_profit
+
+
+print(max_profit([]))
